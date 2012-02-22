@@ -14,6 +14,6 @@ echo "  Command: ${cmd}"
 echo "Hit Ctrl-C to abort, or RETURN to upload."
 read
 
-${cmd}
+eval ${cmd}
 
 echo "Fini."
