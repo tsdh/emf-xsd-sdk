@@ -1,16 +1,19 @@
 # emf-xsd-sdk
 
 This project's purpose is to simplify the process of making EMF technologies
-available via Maven.
+available via Maven by packing the contents of the JARs in the EMF All-In-One
+SDK bundle into one single JAR, and pushing that as an artifact to the public
+[Clojars Maven repository](http://clojars.org)
 
 ## Usage
 
-This project is based on the excellend
+This project is based on the excellent
 [Leiningen](https://github.com/technomancy/leiningen) tool, which you need to
-install first.
+install first.  Furthermore, you need an account at
+[Clojars](http://clojars.org).
 
-After you've done that, this is the procedure to create a new emf-xsd-sdk
-release and push it to [Clojars](http://clojars.org/emf-xsd-sdk).
+Once these requirements are met, this is the procedure to create a new
+emf-xsd-sdk release and push it to [Clojars](http://clojars.org/emf-xsd-sdk).
 
 1. Download the current EMF All-In-One SDK (`emf-xsd-SDK-x.y.z.zip`) from the
 [EMF Homepage](http://www.eclipse.org/modeling/emf/).
