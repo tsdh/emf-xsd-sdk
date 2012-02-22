@@ -1,0 +1,5 @@
+/pom.xml
+/.lein-failures
+/.lein-deps-sum
+emf-xsd-sdk-*.jar
+emf-jars/*.jar
