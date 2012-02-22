@@ -5,6 +5,13 @@ available via Maven.
 
 ## Usage
 
+This project is based on the excellend
+[Leiningen](https://github.com/technomancy/leiningen) tool, which you need to
+install first.
+
+After you've done that, this is the procedure to create a new emf-xsd-sdk
+release and push it to [Clojars](http://clojars.org/emf-xsd-sdk).
+
 1. Download the current EMF All-In-One SDK (`emf-xsd-SDK-x.y.z.zip`) from the
 [EMF Homepage](http://www.eclipse.org/modeling/emf/).
 
