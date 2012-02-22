@@ -9,4 +9,4 @@
   ;; Where are the EMF jars?
   :library-path "emf-jars"
   :jar-exclusions [#"(\.git/|PUT_EMF_SDK_JARS_HERE|examples)"]
-  :uberjar-exclusions [#"(\.git/|PUT_EMF_SDK_JARS_HERE|examples|tutorials|cheatsheets|references)"])
+  :uberjar-exclusions [#"(\.git/|PUT_EMF_SDK_JARS_HERE|examples|tutorials|cheatsheets|references|META-INF/.*\.(sf|dsa|rsa|SF|RSA|DSA))"])
