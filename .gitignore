@@ -3,5 +3,4 @@
 /.lein-deps-sum
 emf-xsd-sdk-*.jar
 emf-jars/*.jar
-emf-jars/
 target/
