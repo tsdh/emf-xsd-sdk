@@ -32,6 +32,6 @@ are not included) and upload it to clojars.
 
 ## License
 
-Copyright (C) 2012 Tassilo Horn
+Copyright (C) 2012-2013 Tassilo Horn
 
 Distributed under the Eclipse Public License.
