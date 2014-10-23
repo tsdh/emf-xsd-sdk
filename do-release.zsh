@@ -8,30 +8,21 @@ done
 cd ..
 rm -rf emf-jars/META-INF/
 
-echo "Creating an Uberjar"
-lein uberjar
+echo "Creating an JAR"
+lein jar
 
-echo "Creating a pom.xml"
-lein pom
-
-file=`ls target/emf-xsd-sdk-*-standalone.jar`
+file=target/emf-xsd-sdk-2.10.1.jar
 
 if [[ ! -f ${file} ]]; then
     echo "Error: ${file} doesn't exist!"
     exit 1
 fi
 
-echo "Moving ${file} to ${file/-standalone/}."
-mv ${file} ${file/-standalone/}
-file=${file/-standalone/}
-
-cmd="scp pom.xml ${file} clojars@clojars.org:"
-
 echo "Are you really sure you want to upload ${file} to clojars.org?"
-echo "  Command: ${cmd}"
 echo "Hit Ctrl-C to abort, or RETURN to upload."
 read
 
-eval ${cmd}
+echo "Deploying to Clojars"
+lein deploy clojars
 
 echo "Fini."

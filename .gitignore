@@ -4,3 +4,4 @@
 emf-xsd-sdk-*.jar
 emf-jars/*.jar
 target/
+emf-jars/*
