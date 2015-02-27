@@ -12,13 +12,24 @@ DOCSET="emf-xsd-sdk"
 # cp -R javadocs/* \
 #    ${DOCSET}.docset/Contents/Resources/Documents/
 
-# Dowload the Info.plist file and edit it
-# wget http://kapeli.com/dash_resources/Info.plist \
-#      -O ${DOCSET}.docset/Contents/Info.plist
-# sed -i -e 's/nginx/emf-xsd-sdk/' \
-#     ${DOCSET}.docset/Contents/Info.plist
-# sed -i -e 's/Nginx/EMF XSD SDK/' \
-#     ${DOCSET}.docset/Contents/Info.plist
+cat <<EOF > ${DOCSET}.docset/Contents/Info.plist
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleIdentifier</key>
+  <string>emf-xsd-sdk</string>
+  <key>CFBundleName</key>
+  <string>EMF XSD SDK</string>
+  <key>DocSetPlatformFamily</key>
+  <string>emf-xsd-sdk</string>
+  <key>isDashDocset</key>
+  <true/>
+  <key>dashIndexFilePath</key>
+  <string>overview-summary.html</string>
+</dict>
+</plist>
+EOF
 
 DB="${DOCSET}.docset/Contents/Resources/docSet.dsidx"
 
@@ -68,13 +79,18 @@ function parseDetails() {
 	anchor=$(echo ${l} | grep -oP '<a name="\K.*?(?=">.*)')
 	thing=$(echo ${l} | grep -oP '<h4>\K.*(?=</h4>)')
 	if [[ -n ${anchor} && -n ${thing} ]]; then
-	    echo "  --> ${2} ${thing}"
-	    if [[ ${thing} == ${1} && ${2} != "Constructor" ]]; then
+	    local type=${2}
+	    if [[ ${type} == "Field" && ${thing} =~ "^[A-Z0-9_]+$" ]]; then
+		# All-uppercase fields are usually constants
+		type="Constant"
+	    fi
+	    echo "   |--> ${type} ${thing}"
+	    if [[ ${thing} == ${1} && ${type} != "Constructor" ]]; then
 		# Inserting a Class/Enum/Interface
-		insertIntoDB "${thing}" ${2} "${3}#${anchor}"
+		insertIntoDB "${thing}" ${type} "${3}#${anchor}"
 	    else
 		# Inserting a Field or Method or Constructor
-		insertIntoDB "${thing} (${1})" ${2} "${3}#${anchor}"
+		insertIntoDB "${thing} (${1})" ${type} "${3}#${anchor}"
 	    fi
 	fi
     done
@@ -98,7 +114,7 @@ function parseJavaDocFile() {
     if [[ -n ${class} ]]; then
 	local -a a
 	a=(${(s/ /)class})
-	echo "--> $a[1] $a[2]"
+	echo "====> $a[1] $a[2]"
 	insertIntoDB $a[2] $a[1] ${1}
 	# Fields
 	parseFileDetails $a[2] ${1} "Field" "FIELD"
