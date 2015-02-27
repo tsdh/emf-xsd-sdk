@@ -34,23 +34,80 @@ sqlite3 ${DB} \
 	'CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, type TEXT, path TEXT);
          CREATE UNIQUE INDEX anchor ON searchIndex (name, type, path);'
 
+# $1 = name
+# $2 = type
+# $3 = link
 function insertIntoDB() {
-    name=${1}
-    type=${2}
-    file=${3}
     sqlite3 ../docSet.dsidx \
-	    "INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES ('${name}', '${type}', '${file}');"
+	    "INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES ('${1}', '${2}', '${3}');"
 }
 
+function compressDetails() {
+    local line=""
+    while IFS= read -r l; do
+	echo $l
+	if [[ $l == -- ]]; then
+	    print -r - $line
+	    line=""
+	else
+	    line+=${l}
+	fi
+    done
+    if [[ -n ${line} ]]; then
+	print -r - $line
+    fi
+}
+
+# $1 = class
+# $2 = type
+# $3 = file
+function parseDetails() {
+    local anchor
+    local thing
+    while IFS= read -r l; do
+	anchor=$(echo ${l} | grep -oP '<a name="\K.*?(?=">.*)')
+	thing=$(echo ${l} | grep -oP '<h4>\K.*(?=</h4>)')
+	if [[ -n ${anchor} && -n ${thing} ]]; then
+	    echo "  --> ${2} ${thing}"
+	    if [[ ${thing} == ${1} && ${2} != "Constructor" ]]; then
+		# Inserting a Class/Enum/Interface
+		insertIntoDB "${thing}" ${2} "${3}#${anchor}"
+	    else
+		# Inserting a Field or Method or Constructor
+		insertIntoDB "${thing} (${1})" ${2} "${3}#${anchor}"
+	    fi
+	fi
+    done
+}
+
+# $1 = class
+# $2 = file
+# $3 = type
+# $4 = rx
+function parseFileDetails() {
+    sed -n "/=\+ ${4} DETAIL =\+/,/========/p" ${2} \
+	| grep -P -B5 '<h4>.*</h4>' \
+	| compressDetails \
+    	| parseDetails ${1} ${3} ${2}
+}
+
+# $1 = file
 function parseJavaDocFile() {
-    # echo "Parsing file ${file}"
-    file=${1}
-    class=`grep -oP '<title>\K([A-Z].*)(?=</title>)' ${file}`
+    local class
+    class=$(grep -oP '<h2 title="[^"]+" class="title">\K(Interface|Class|Enum).*(?=</h2>)' ${1})
     if [[ -n ${class} ]]; then
-	echo "Found class: ${class}"
-	insertIntoDB ${class} "Class" ${file}
+	local -a a
+	a=(${(s/ /)class})
+	echo "--> $a[1] $a[2]"
+	insertIntoDB $a[2] $a[1] ${1}
+	# Fields
+	parseFileDetails $a[2] ${1} "Field" "FIELD"
+	# Constructors
+	parseFileDetails $a[2] ${1} "Constructor" "CONSTRUCTOR"
+	# Methods
+	parseFileDetails $a[2] ${1} "Method" "METHOD"
     else
-	echo "Ignoring ${class} from file ${file}"
+	echo "Ignoring file ${file}"
     fi
 }
 
