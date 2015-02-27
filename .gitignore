@@ -5,3 +5,6 @@ emf-xsd-sdk-*.jar
 emf-jars/*.jar
 target/
 emf-jars/*
+EMF_XSD_SDK.docset/
+EMF_XSD_SDK.tgz
+pom.xml.asc
