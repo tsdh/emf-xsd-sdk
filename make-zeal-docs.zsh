@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-DOCSET="emf-xsd-sdk.docset"
+DOCSET="EMF_XSD_SDK.docset"
 
 if [[ -d ${DOCSET} ]]; then
     echo "Deleting the old ${DOCSET} directory"
