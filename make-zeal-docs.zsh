@@ -134,6 +134,6 @@ done
 cd -
 
 # Add an icon
-cp emf-jars/modeling32.png ${DOCSET}/
+cp emf-jars/modeling32.png ${DOCSET}/icon.png
 
 echo Fini.
