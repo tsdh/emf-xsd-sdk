@@ -3,7 +3,7 @@
 # Generate the docs into the javadocs/ folder
 #javadoc -d javadocs/ emf-jars/org/eclipse/**/*.java
 
-DOCSET="emf-xsd-sdk"
+DOCSET="emf-xsd-sdk.docset"
 
 # Create the docset folder
 #mkdir -p ${DOCSET}.docset/Contents/Resources/Documents/
@@ -12,7 +12,7 @@ DOCSET="emf-xsd-sdk"
 # cp -R javadocs/* \
 #    ${DOCSET}.docset/Contents/Resources/Documents/
 
-cat <<EOF > ${DOCSET}.docset/Contents/Info.plist
+cat <<EOF > ${DOCSET}/Contents/Info.plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -31,7 +31,7 @@ cat <<EOF > ${DOCSET}.docset/Contents/Info.plist
 </plist>
 EOF
 
-DB="${DOCSET}.docset/Contents/Resources/docSet.dsidx"
+DB="${DOCSET}/Contents/Resources/docSet.dsidx"
 
 # Delete the DB in case it exists
 if [[ -f ${DB} ]]; then
