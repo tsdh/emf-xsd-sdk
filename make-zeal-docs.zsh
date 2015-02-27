@@ -140,7 +140,7 @@ function parseJavaDocFile() {
     fi
 }
 
-cd emf-xsd-sdk.docset/Contents/Resources/Documents/
+cd ${DOCSET}/Contents/Resources/Documents/
 for file in org/eclipse/**/*.html; do
     parseJavaDocFile ${file}
 done
