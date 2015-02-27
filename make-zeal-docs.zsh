@@ -1,17 +1,20 @@
 #!/bin/zsh
 
-# Generate the docs into the javadocs/ folder
-#javadoc -d javadocs/ emf-jars/org/eclipse/**/*.java
-
 DOCSET="emf-xsd-sdk.docset"
 
+if [[ -d ${DOCSET} ]]; then
+    echo "Deleting the old ${DOCSET} directory"
+    rm -rf ${DOCSET}
+fi
+
 # Create the docset folder
-#mkdir -p ${DOCSET}.docset/Contents/Resources/Documents/
+mkdir -p ${DOCSET}/Contents/Resources/Documents/
 
-# Copy over the javadocs
-# cp -R javadocs/* \
-#    ${DOCSET}.docset/Contents/Resources/Documents/
+# Generate the docs
+javadoc -d ${DOCSET}/Contents/Resources/Documents/ \
+	emf-jars/org/eclipse/**/*.java
 
+# Create the Info.plist
 cat <<EOF > ${DOCSET}/Contents/Info.plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -31,13 +34,23 @@ cat <<EOF > ${DOCSET}/Contents/Info.plist
 </plist>
 EOF
 
-DB="${DOCSET}/Contents/Resources/docSet.dsidx"
+# Create the meta.json
+cat <<EOF > ${DOCSET}/meta.json
+{
+    "aliases": [],
+    "feed_url": "",
+    "icon": "lisp",
+    "name": "emf-xsd-sdk",
+    "oldVersions": [],
+    "revision": "1",
+    "source": "tsdh",
+    "title": "EMF XSD SDK",
+    "urls": [],
+    "version": ""
+}
+EOF
 
-# Delete the DB in case it exists
-if [[ -f ${DB} ]]; then
-    echo "Deleting the old database ${DB}."
-    rm ${DB}
-fi
+DB="${DOCSET}/Contents/Resources/docSet.dsidx"
 
 # Create the SQLite DB
 echo "Creating new database ${DB}"
