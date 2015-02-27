@@ -133,4 +133,7 @@ for file in org/eclipse/**/*.html; do
 done
 cd -
 
+# Add an icon
+cp emf-jars/modeling32.png ${DOCSET}/
+
 echo Fini.
