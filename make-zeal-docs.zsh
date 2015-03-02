@@ -146,7 +146,8 @@ for file in org/eclipse/**/*.html; do
 done
 cd -
 
-# Add an icon
-cp emf-jars/modeling32.png ${DOCSET}/icon.png
+# Add icons
+cp emf-jars/modeling32.png ${DOCSET}/icon@2x.png
+convert -scale 16x16 ${DOCSET}/icon@2x.png ${DOCSET}/icon.png
 
 echo Fini.
