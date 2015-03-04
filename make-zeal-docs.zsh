@@ -58,12 +58,19 @@ sqlite3 ${DB} \
 	'CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, type TEXT, path TEXT);
          CREATE UNIQUE INDEX anchor ON searchIndex (name, type, path);'
 
+function htmlEscape() {
+    echo ${1} | sed -e 's/&lt;/</' | sed -e 's/&gt;/>/'
+}
+
 # $1 = name
 # $2 = type
 # $3 = link
 function insertIntoDB() {
+    local name
+    name=$(htmlEscape ${1})
     sqlite3 ../docSet.dsidx \
-	    "INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES ('${1}', '${2}', '${3}');"
+	    "INSERT OR IGNORE INTO searchIndex(name, type, path)
+             VALUES ('${name}', '${2}', '${3}');"
 }
 
 function compressDetails() {
