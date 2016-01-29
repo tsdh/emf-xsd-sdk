@@ -1,4 +1,4 @@
-(defproject emf-xsd-sdk "2.10.1"
+(defproject emf-xsd-sdk "2.11.1"
   :description "The Eclipse Modeling Framework SDK bundle.
 
   For EMF, see http://www.eclipse.org/modeling/emf/.
