@@ -1,5 +1,8 @@
 #!/bin/zsh
 
+echo "Cleaning target/..."
+rm -rf target/
+
 echo "Unzipping jars in emf-jars/..."
 cd emf-jars/
 for x in *.jar; do
@@ -8,10 +11,10 @@ done
 cd ..
 rm -rf emf-jars/META-INF/
 
-echo "Creating an JAR"
+echo "Creating a JAR"
 lein jar
 
-file=target/emf-xsd-sdk-2.10.1.jar
+file=`ls target/emf-xsd-sdk-*.jar`
 
 if [[ ! -f ${file} ]]; then
     echo "Error: ${file} doesn't exist!"
